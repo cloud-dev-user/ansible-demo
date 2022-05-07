@@ -1,0 +1,40 @@
+---
+- hosts: dev 
+  tasks: 
+        - name: copy file1 to target host 
+          ansible.builtin.copy:
+                   src: /tmp/file1
+                   dest: /tmp/file2
+
+        - name: Download tomcat on target host 
+          get_url:
+                url: https://dlcdn.apache.org/tomcat/tomcat-8/v8.5.78/bin/apache-tomcat-8.5.78.tar.gz
+                dest: /tmp/
+                mode: '0755'
+
+        - name: Create tomcat directory if not exist
+          ansible.builtin.file:
+                   path: /tmp/tomcat
+                   state: directory
+                   mode: '0755'
+
+        - name: extract tomcat file to target host 
+          ansible.builtin.unarchive:
+                src: /tmp/apache-tomcat-8.5.78.tar.gz
+                dest: /tmp/tomcat
+                remote_src: yes
+
+        - name: Check and update tomcat port to 9089
+          ansible.builtin.lineinfile:
+                  path: /tmp/tomcat/apache-tomcat-8.5.78/conf/server.xml 
+                  search_string: '    <Connector port="8080" protocol="HTTP/1.1"'
+                  line: '    <Connector port="9089" protocol="HTTP/1.1"'      
+                  
+        - name: Start tomcat on host machine
+          ansible.builtin.shell: "./startup.sh && ps -aef | grep tomcat"
+          args:
+                            chdir: /tmp/tomcat/apache-tomcat-8.5.78/bin 
+          register: results 
+
+        - debug:
+                var: results

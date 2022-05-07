@@ -1,0 +1,9 @@
+---
+
+- hosts: dev
+  become: true
+  tasks: 
+         - name: install httpd server 
+           yum:
+                 name: httpd
+                 state: absent
