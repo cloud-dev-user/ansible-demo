@@ -6,6 +6,10 @@ pipeline {
         sh 'echo " Hello WOrld "'
       }
     }
-
+     stage('demo') {
+      steps {
+        sh 'ip a &&  ansible-playbook demo.yaml'
+      }
+    }
   }
 }
