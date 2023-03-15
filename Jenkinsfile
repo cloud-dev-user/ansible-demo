@@ -6,7 +6,7 @@ pipeline {
         sh 'echo " Hello WOrld "'
       }
     }
-     stage('demo') {
+     stage('ansible playbook deployment') {
       steps {
         sh 'ip a &&  ansible-playbook demo.yaml'
       }
