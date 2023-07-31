@@ -6,4 +6,4 @@
          - name: install httpd server 
            yum:
                  name: httpd
-                 state: absent
+                 state: present
